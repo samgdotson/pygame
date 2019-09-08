@@ -1,12 +1,11 @@
 import pygame 
 import sys
-
-pygame.init()
-
+import controls
 
 # window parameters
 WIDTH = 800
 HEIGHT = 500
+# font = pygame.font.SysFont("monospace", 24)
 
 # color codes
 BACKGROUND_COLOR = (169,169,169)
@@ -20,6 +19,7 @@ player_size = (50, 50)
 # button position
 button_size = [100, 50]
 button_pos = [100, 200]
+button_list = []
 
 # define useful functions
 def check_button_press(mouse_pos, button_pos = button_pos): # make button_pos a list of button positions
@@ -44,7 +44,8 @@ def check_button_press(mouse_pos, button_pos = button_pos): # make button_pos a 
 
 	return pressed
 
-
+# begin game
+pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 screen.fill(BACKGROUND_COLOR)
 
@@ -56,8 +57,16 @@ while not game_over:
 		# prevents printing every mouse motion
 		if event.type != pygame.MOUSEMOTION:
 			print(event)
+			print(player_pos)
 
+		# exit conditions
 		if event.type == pygame.QUIT:
+			sys.exit()
+
+		if player_pos[0] > WIDTH or player_pos[0] < 0:
+			sys.exit()
+
+		if player_pos[1] > HEIGHT or player_pos[1] < 0:
 			sys.exit()
 
 		if event.type == pygame.KEYDOWN:
@@ -84,14 +93,12 @@ while not game_over:
 
 			player_pos = [x,y]
 
-
-				
-			
-
 	screen.fill(BACKGROUND_COLOR)
 
-	pygame.draw.rect(screen, RED, (player_pos[0], player_pos[1], player_size[0], player_size[1]))
+	agent = pygame.draw.rect(screen, RED, (player_pos[0], player_pos[1], player_size[0], player_size[1]))
 
 	pygame.draw.rect(screen, BUTTON_TAN, (button_pos[0], button_pos[1], button_size[0], button_size[1]))
+
+	controls.create_button("down", screen, (100, 100), (50, 50))
 	
 	pygame.display.update()
